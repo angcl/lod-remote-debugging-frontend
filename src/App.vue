@@ -9,22 +9,17 @@ let connection = ref(null)
 
 function handleMessage(event) {
   // If scriptlist packet, set scriptlist
-  console.log(event.data)
-  appStore.setScripts(["Script 1", "Script 2"])
+  var data = JSON.parse(event.data)
+  if (data["script-list"] !== undefined) {
+    appStore.setScripts(data["script-list"])
+    console.log(data["script-list"])
+  }
 }
 
 onMounted(() => {
-  connection.value = new WebSocket("wss://demo.piesocket.com/v3/channel_1?api_key=VCXCEuvhGcBDP7XhiJJUDvR1e1D3eiVjgZ9VRiaV&notify_self")
+  connection.value = new WebSocket("ws://localhost:12345")
   connection.value.addEventListener('message', handleMessage)
 })
-
-function increment() {
-  counter.count++;
-}
-
-function sendCommand() {
-  connection.value.send('Test')
-}
 
 </script>
 
